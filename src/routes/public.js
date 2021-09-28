@@ -1,7 +1,9 @@
+// const { authJwt } = require("../middleware");
+
 import express from 'express';
 import validate from 'express-validation';
 
-import * as userController from '../controllers/user/user.controller';
+import * as adminController from '../controllers/user/user.controller';
 import * as userValidator from '../controllers/user/user.validator';
 
 const router = express.Router();
@@ -13,12 +15,17 @@ const router = express.Router();
 router.post(
   '/login',
   validate(userValidator.login),
-  userController.login,
+  adminController.login,
 );
 router.post(
   '/register',
   validate(userValidator.register),
-  userController.register,
+  adminController.register,
+);
+
+router.get(
+  '/forgetPassword',
+  adminController.forgetPassword
 );
 
 module.exports = router;

@@ -4,25 +4,10 @@ import axios from 'axios';
 import { User } from '../../models';
 import { successResponse, errorResponse, uniqueId } from '../../helpers';
 
-export const allUsers = async (req, res) => {
-  try {
-    const page = req.params.page || 1;
-    const limit = 2;
-    const users = await User.findAndCountAll({
-      order: [['createdAt', 'DESC'], ['firstName', 'ASC']],
-      offset: (page - 1) * limit,
-      limit,
-    });
-    return successResponse(req, res, { users });
-  } catch (error) {
-    return errorResponse(req, res, error.message);
-  }
-};
-
 export const register = async (req, res) => {
   try {
     const {
-      email, password, firstName, lastName,
+       name, username, email, password
     } = req.body;
     if (process.env.IS_GOOGLE_AUTH_ENABLE === 'true') {
       if (!req.body.code) {
@@ -57,9 +42,9 @@ export const register = async (req, res) => {
       .update(password)
       .digest('hex');
     const payload = {
+      name,
+      username,
       email,
-      firstName,
-      lastName,
       password: reqPass,
       isVerified: false,
       verifyToken: uniqueId(),
@@ -78,14 +63,14 @@ export const login = async (req, res) => {
       where: { email: req.body.email },
     });
     if (!user) {
-      throw new Error('Incorrect Email Id/Password');
+      throw new Error('Incorrect Email');
     }
     const reqPass = crypto
       .createHash('md5')
       .update(req.body.password || '')
       .digest('hex');
     if (reqPass !== user.password) {
-      throw new Error('Incorrect Email Id/Password');
+      throw new Error('Incorrect Password');
     }
     const token = jwt.sign(
       {
@@ -104,17 +89,114 @@ export const login = async (req, res) => {
   }
 };
 
+export const userBoard = (req, res) => {
+  res.status(200).send("User Content.");
+};
+
 export const profile = async (req, res) => {
   try {
-    const { userId } = req.user;
-    const user = await User.findOne({ where: { id: userId } });
-    return successResponse(req, res, { user });
+    const { user } = req.user;
+    const userId = await User.findOne({ where: { id: user } });
+    return successResponse(req, res, { userId });
   } catch (error) {
     return errorResponse(req, res, error.message);
   }
 };
 
-export const changePassword = async (req, res) => {
+export const getUserById = async (req, res) => {
+  try {
+    const {
+      id
+    } = req.params;
+    const [updated] = await User.update(req.body, {
+      where: {
+        id: id
+      }
+    });
+    if (updated) {
+      const updatedUser = await User.findOne({
+        where: {
+          id: id
+        }
+      });
+      return res.status(200).json({
+        user: updatedUser
+      })
+    }
+    throw new Error("User not found");
+  } catch (error) {
+    return errorResponse(req, res, error.message);
+  }
+}
+
+export const updateUserById = async (req, res) => {
+  try {
+    User.update(
+      {
+        name: req.body.name,
+        phone: req.body.phone,
+        password: req.body.password,
+        avatar: req.body.avatar
+      },
+      { where: { id: req.params.id } }
+    ).then((result) => res.json(result))
+  } catch (error) {
+    return errorResponse(req, res, error.message);
+  }
+}
+
+export const deleteUser = async (req, res) => {
+  try {
+    const {id} = req.params;
+    const deleted = await User.destroy({
+      where: {id: id}
+    });
+    if(deleted) {
+      return res.status(204).send("User deleted");
+    } throw new Error("User not found");
+  } catch (error) {
+    return errorResponse(req, res, error.message);
+  }
+}
+
+// not yet
+export const checkIn = async (req, res) => {
+  try {
+    
+  } catch (error) {
+    return errorResponse(req, res, error.message);
+  }
+}
+
+// not yet
+export const checkOut = async (req, res) => {
+  try {
+    
+  } catch (error) {
+    return errorResponse(req, res, error.message);
+  }
+}
+
+// not yet
+export const getLocation = async (req, res) => {
+  try {
+    
+  } catch (error) {
+    return errorResponse(req, res, error.message);
+  }
+}
+
+// not yet
+export const forgetPassword = async (req, res) => {
+  try {
+
+  } catch (error) {
+    return errorResponse(req, res, error.message);
+  }
+}
+
+// not yet
+export const resetPassword = async (req, res) => {
   try {
     const { userId } = req.user;
     const user = await User.scope('withSecretColumns').findOne({
