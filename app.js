@@ -5,7 +5,6 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 
 import publicRoutes from './src/routes/public';
-import apiRoutes from './src/routes/api';
 import adminRoutes from './src/routes/admin';
 import userRoutes from './src/routes/user';
 import apiMiddleware from './src/middleware/apiAuth';

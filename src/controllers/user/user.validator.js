@@ -52,3 +52,18 @@ export const checkOut = {
     
   }
 }
+export const getLocation = {
+  body: {
+    
+  }
+}
+export const deleteUser = {
+  body: {
+    
+  }
+}
+export const resetPassword = {
+  body: {
+    
+  }
+}
