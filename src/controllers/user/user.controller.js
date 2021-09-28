@@ -163,7 +163,7 @@ export const checkIn = async (req, res) => {
 // not yet
 export const checkOut = async (req, res) => {
   try {
-    return res.status(200).send("todos");
+    return res.status(200).send("checkout");
   } catch (error) {
     return errorResponse(req, res, error.message);
   }

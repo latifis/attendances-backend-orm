@@ -28,7 +28,7 @@ router.post(
 
 router.post(
   "/checkout",
-  validate(userValidator.checkOut),
+  // validate(userValidator.checkOut),
   userController.checkOut
 );
 
