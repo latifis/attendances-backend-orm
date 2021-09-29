@@ -25,6 +25,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
+    verifiedToken: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: "123"
+    },
     isAdmin: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
@@ -40,10 +45,15 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: 0
     },
-    location: {
+    latitude: {
       type: DataTypes.FLOAT,
       allowNull: true,
-      defaultValue: -123456432
+      defaultValue: -112256432
+    },
+    longitude: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+      defaultValue: -121456432
     },
   }, {});
   User.associate = function(models) {
