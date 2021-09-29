@@ -27,7 +27,7 @@ export const register = async (req, res) => {
       }
     }
 
-    const user = await User.scope("withSecretColumns").findOne({
+    const user = await User.findOne({
       where: { email },
     });
     if (user) {
@@ -50,13 +50,21 @@ export const register = async (req, res) => {
   }
 };
 
+// .scope("withSecretColumns")
+
 export const login = async (req, res) => {
   try {
-    const user = await User.scope("withSecretColumns").findOne({
+    const user = await User.findOne({
       where: { email: req.body.email },
     });
+    const username = await User.findOne({
+      where: { username: req.body.username },
+    });
     if (!user) {
-      throw new Error("Incorrect Email");
+      throw new Error("Incorrect Email!");
+    } 
+    if (!username) {
+      throw new Error("Incorrect Username!")
     }
     const reqPass = crypto
       .createHash("md5")

@@ -16,15 +16,17 @@ module.exports = {
       username: {
         type: DataTypes.STRING,
         allowNull: false,
-        defaultValue: ""
+        defaultValue: "username"
       },
       email: {
         type: DataTypes.STRING,
         allowNull: false,
+        defaultValue: "user@gmail.com"
       },
       password: {
         type: DataTypes.STRING,
         allowNull: false,
+        defaultValue: "userpass"
       },
       avatar: {
         type: DataTypes.STRING,
@@ -32,27 +34,33 @@ module.exports = {
       },
       isAdmin: {
         type: DataTypes.BOOLEAN,
+        allowNull: false,
         defaultValue: 0
       },
       isApproved: {
         type: DataTypes.BOOLEAN,
+        allowNull: false,
         defaultValue: 0,
-        allowNull: true,
       },
       isVerified: {
         type: DataTypes.BOOLEAN,
-        allowNull: true,
+        allowNull: false,
+        defaultValue: 0
       },
       location: {
-        type: DataTypes.FLOAT
+        type: DataTypes.FLOAT,
+        allowNull: true,
+        defaultValue: -123456432
       },
       createdAt: {
+        type: DataTypes.DATE,
         allowNull: false,
-        type: DataTypes.DATE
+        defaultValue: new Date()
       },
       updatedAt: {
+        type: DataTypes.DATE,
         allowNull: false,
-        type: DataTypes.DATE
+        defaultValue: new Date()
       }
     });
   },

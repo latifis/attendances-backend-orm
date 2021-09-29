@@ -15,8 +15,8 @@ export const changePassword = {
 
 export const register = {
   body: {
-    firstName: Joi.string().required(),
-    lastName: Joi.string().required(),
+    name: Joi.string().required(),
+    username: Joi.string().required(),
     email: Joi.string().email().required(),
     password: Joi.string().required(),
   },

@@ -17,7 +17,7 @@ export const getAllUsers = async (req, res) => {
     const users = await User.findAndCountAll({
       order: [
         ['createdAt', 'DESC'],
-        ['firstName', 'ASC']
+        ['name', 'ASC']
       ],
       // offset: (page - 1) * limit,
       // limit,
