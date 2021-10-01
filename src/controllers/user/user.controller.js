@@ -34,6 +34,11 @@ export const register = async (req, res) => {
       throw new Error("User already exists with same email");
     }
     const reqPass = crypto.createHash("md5").update(password).digest("hex");
+
+    // const dataUser = {
+      
+    // }
+
     const payload = {
       name,
       username,
@@ -57,15 +62,9 @@ export const login = async (req, res) => {
     const user = await User.findOne({
       where: { email: req.body.email },
     });
-    const username = await User.findOne({
-      where: { username: req.body.username },
-    });
     if (!user) {
       throw new Error("Incorrect Email!");
     } 
-    if (!username) {
-      throw new Error("Incorrect Username!")
-    }
     const reqPass = crypto
       .createHash("md5")
       .update(req.body.password || "")
@@ -73,7 +72,7 @@ export const login = async (req, res) => {
     if (reqPass !== user.password) {
       throw new Error("Incorrect Password");
     }
-    const token = jwt.sign(
+    const verifiedToken = jwt.sign(
       {
         user: {
           userId: user.id,
@@ -84,7 +83,7 @@ export const login = async (req, res) => {
       process.env.SECRET
     );
     delete user.dataValues.password;
-    return successResponse(req, res, { user, token });
+    return successResponse(req, res, { user, verifiedToken });
   } catch (error) {
     return errorResponse(req, res, error.message);
   }

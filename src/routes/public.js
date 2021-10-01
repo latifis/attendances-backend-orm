@@ -3,7 +3,7 @@
 import express from "express";
 import validate from "express-validation";
 
-import * as adminController from "../controllers/user/user.controller";
+import * as userController from "../controllers/user/user.controller";
 import * as userValidator from "../controllers/user/user.validator";
 
 const router = express.Router();
@@ -12,13 +12,13 @@ const router = express.Router();
 // Public routes
 //= ===============================
 
-router.post("/login", validate(userValidator.login), adminController.login);
+router.post("/login", validate(userValidator.login), userController.login);
 router.post(
   "/register",
   validate(userValidator.register),
-  adminController.register
+  userController.register
 );
 
-router.get("/forgetPassword", adminController.forgetPassword);
+router.get("/forgetPassword", userController.forgetPassword);
 
 module.exports = router;
