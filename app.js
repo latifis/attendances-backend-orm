@@ -37,41 +37,5 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to bezkoder application." });
 });
 
-// app.post('/send', (req, res) => { 
-//   async function sendMail() {
-//     try {
-//       const accessToken = await oAuth2Client.getAccessToken()
-      
-//       const transport = nodemailer.createTransport({
-//         service: "Gmail",
-//         auth: {
-//           type: 'OAuth2',
-//           user: 'testingalvi@gmail.com',
-//           clientId: CLIENT_ID,
-//           clientSecret: CLIENT_SECRET,
-//           refreshToken: REFRESH_TOKEN,
-//           accessToken: accessToken,
-//         }
-//       })
-  
-//       const mailOptions = {
-//         from: 'TESTINGALVI 🗿 <testingalvi@gmail.com>',
-//         to: 'alvigeovan29@gmail.com', 
-//         subject: 'Hello from gmail using API',
-//         text: 'Hello from gmail email using API',
-//         html: '<h1>Hello from gmail email using API</h1>'
-//       };
-  
-//       const result = await transport.sendMail(mailOptions) 
-//       return result
-  
-//     } catch (error) {
-//       return error
-//     }
-//   }
-//   sendMail().then(result => console.log("Email sent...", result))
-//   .catch(error => console.log(error.message))
-// });
-
 
 module.exports = app;
