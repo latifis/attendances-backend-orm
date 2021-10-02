@@ -18,6 +18,7 @@ router.post(
   validate(userValidator.register),
   userController.register
 );
+// router.post('/email-activate', userController.activateAccount)
 
 router.get("/forgetPassword", userController.forgetPassword);
 

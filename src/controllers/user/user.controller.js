@@ -34,11 +34,6 @@ export const register = async (req, res) => {
       throw new Error("User already exists with same email");
     }
     const reqPass = crypto.createHash("md5").update(password).digest("hex");
-
-    // const dataUser = {
-      
-    // }
-
     const payload = {
       name,
       username,
@@ -49,6 +44,7 @@ export const register = async (req, res) => {
     };
 
     const newUser = await User.create(payload);
+    console.log(newUser)
     return successResponse(req, res, {});
   } catch (error) {
     return errorResponse(req, res, error.message);
@@ -72,7 +68,7 @@ export const login = async (req, res) => {
     if (reqPass !== user.password) {
       throw new Error("Incorrect Password");
     }
-    const verifiedToken = jwt.sign(
+    const token = jwt.sign(
       {
         user: {
           userId: user.id,
@@ -83,10 +79,29 @@ export const login = async (req, res) => {
       process.env.SECRET
     );
     delete user.dataValues.password;
-    return successResponse(req, res, { user, verifiedToken });
+    return successResponse(req, res, { user, token });
   } catch (error) {
     return errorResponse(req, res, error.message);
   }
+};
+
+// not yet
+export const forgetPassword = async (req, res) => {
+  const {email} = req.body;
+
+  User.findOne({email}, (err, user) => {
+    if(err || !user) {
+      return res.status(400).json({error: "User with this email already exists."});
+    }
+
+    const token = jwt.sign({name, email, password}, process.env.JWT_ACC_ACTIVATE, {expiresIn: "20m"});
+    const data = {
+      from: 'testingalvi@gmail.com',
+      to: email,
+      subject: `Account Activation Link',
+      html: '<h2>Please click on given link to activate your account</h2><p>${process.env.CLIENT_URL}/authentication/activate${token}</p>`
+    }
+  })
 };
 
 export const userBoard = (req, res) => {
@@ -185,14 +200,7 @@ export const getLocation = async (req, res) => {
   }
 };
 
-// not yet
-export const forgetPassword = async (req, res) => {
-  try {
-    return res.status(200).send("todos");
-  } catch (error) {
-    return errorResponse(req, res, error.message);
-  }
-};
+
 
 // not yet
 export const resetPassword = async (req, res) => {
