@@ -75,7 +75,7 @@ export const register = async (req, res) => {
       email,
       password: reqPass,
       isVerified: false,
-      verifyToken: uniqueId(),
+      verifiedToken: uniqueId(),
     };
 
     const newUser = await User.create(payload);
@@ -118,44 +118,48 @@ export const login = async (req, res) => {
       process.env.SECRET
     );
     delete user.dataValues.password;
+  
 
-    async function sendMail() {
-      try {
-        const accessToken = await oAuth2Client.getAccessToken()
-
-        const transport = nodemailer.createTransport({
-          service: "Gmail",
-          auth: {
-            type: 'OAuth2',
-            user: 'testingalvi@gmail.com',
-            clientId: CLIENT_ID,
-            clientSecret: CLIENT_SECRET,
-            refreshToken: REFRESH_TOKEN,
-            accessToken: accessToken,
-          }
-        })
-
-        const mailOptions = {
-          from: 'TESTINGALVI 🗿 <testingalvi@gmail.com>',
-          to: email,
-          subject: `Hello ${user.username}`,
-          text: '<h1>Hello from gmail email using API</h1>',
-          html: `Verify token <link>${token}<link>`
-        };
-
-        const result = await transport.sendMail(mailOptions)
-        return result
-
-      } catch (error) {
-        return error
+    if(!user.isVerified){
+      async function sendMail() {
+        try {
+          const accessToken = await oAuth2Client.getAccessToken()
+  
+          const transport = nodemailer.createTransport({
+            service: "Gmail",
+            auth: {
+              type: 'OAuth2',
+              user: 'testingalvi@gmail.com',
+              clientId: CLIENT_ID,
+              clientSecret: CLIENT_SECRET,
+              refreshToken: REFRESH_TOKEN,
+              accessToken: accessToken,
+            }
+          })
+  
+          const mailOptions = {
+            from: 'TESTINGALVI 🗿 <testingalvi@gmail.com>',
+            to: email,
+            subject: `Hello ${user.username}`,
+            text: '<h1>Hello from gmail email using API</h1>',
+            html: `Verify token <link>${token}<link>`
+          };
+  
+          const result = await transport.sendMail(mailOptions)
+          return result
+  
+        } catch (error) {
+          return error
+        }
       }
+      sendMail().then(result => console.log("Email sent...", result))
+        .catch(error => console.log(error.message))
+  
     }
-    sendMail().then(result => console.log("Email sent...", result))
-      .catch(error => console.log(error.message))
 
     return successResponse(req, res, {
       user,
-      verifiedToken
+      verifiedToken: token
     });
   } catch (error) {
     return errorResponse(req, res, error.message);

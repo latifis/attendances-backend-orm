@@ -27,10 +27,10 @@ app.use(
 app.use(cors());
 app.use(bodyParser.json());
 
-app.use("/pub", publicRoutes);
+app.use("/pub", publicRoutes); //redirct
 app.use("/api/admin", apiMiddleware, adminMiddleware, adminRoutes);
 // app.use('/api/user', apiMiddleware, userRoutes);
-app.use("/api/user", userRoutes);
+app.use("/api/user", apiMiddleware, userRoutes);
 app.use(errorHandler);
 
 app.get("/", (req, res) => {

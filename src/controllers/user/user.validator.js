@@ -31,39 +31,42 @@ export const login = {
 
 export const updateUserById = {
   body: {
-    
+    name: Joi.string().required(),
+    password: Joi.string().required(),
   }
 }
 
 export const location = {
   body: {
-
+    //no need
   }
 }
 
 export const checkIn = {
   body: {
-
+    //no need
   }
 }
 
 export const checkOut = {
   body: {
-    
+    //no need
   }
 }
 export const getLocation = {
   body: {
-    
+    latitude:Joi.string().required(),
+    longitude:Joi.string().required()
   }
 }
 export const deleteUser = {
   body: {
-    
+    //no need
   }
 }
 export const resetPassword = {
   body: {
-    
+    password: Joi.string().required(),
+    newPassword: Joi.string().required()
   }
 }
